@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: site-head">
+    <title th:text="${'All posts, page ' + pageNum}">All Posts</title>
+</head>
+
+<body>
+
+<header th:replace="layout :: site-header" ></header>
+
+<main id="posts">
+    <div class="uk-grid">
+        <div class="uk-width-1-5"></div>
+        <div class="uk-width-2-5 uk-text-left">
+            <br/>
+            <span th:each="p : ${thisPagePosts}">
+                <br/>
+                <a class="nolink" href="#" th:href="@{/posts/viewpost/{id}#disqus_thread/(id=${p.id})}"><h1><strong th:utext="${p.title}"></strong></h1></a>
+                &nbsp;<i class="uk-icon-calendar"></i>&nbsp;
+                <span class="uk-text-muted" th:text="${#dates.format(p.tsPosted, 'dd-MM-yyyy HH:mm')}"></span>&nbsp;&nbsp;
+                <i class="uk-icon-hashtag"></i>&nbsp;
+                <span th:each="t : ${p.postsTagsById}">
+                    <div class="uk-badge" th:text="${t.tagsByTagId.tagName}"></div>
+                </span>
+                &nbsp;<i class="uk-icon-star"></i><span class="uk-text-muted" th:text="${': ' + p.rating}"></span>&nbsp;
+                <i class="uk-icon-comments-o"></i>:&nbsp;<span class="disqus-comment-count uk-text-muted" th:attr="data-disqus-identifier=${p.uId}"></span>
+                <br/><br/>
+                <span class="uk-text-large" th:utext="${p.postsContentsByContent.summary}"></span><br />
+                <div class="uk-text-right"><a class="nolink" href="#" th:href="@{/posts/viewpost/{id}#disqus_thread/(id=${p.id})}">Read more...</a></div><br /></span>
+            <div class="uk-text-right" th:if="${pageNum != 1}">
+                <a href="#" th:href="@{/posts/page/{pageNum}/(pageNum=${pageNum-1})}"><i class="uk-icon-arrow-left uk-icon-large uk-icon-hover"></i></a>
+            </div>
+            <div class="uk-text-right" th:if="${!isLastPage}">
+                <a href="#" th:href="@{/posts/page/{pageNum}/(pageNum=${pageNum+1})}"><i class="uk-icon-arrow-right uk-icon-large uk-icon-hover"></i></a>
+            </div>
+        </div>
+        <div class="uk-width-1-5">
+            <aside th:replace="layout :: side-blocks"></aside>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="layout :: site-footer" ></footer>
+<script id="dsq-count-scr" src="//aheavenx.disqus.com/count.js" async="async"></script>
+</body>
+
+</html>

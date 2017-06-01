@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="site-head">
+    <meta charset="UTF-8" />
+
+    <link rel="stylesheet" href="../public/css/main.css" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" href="../public/css/uikit.css" th:href="@{/css/uikit.css}" />
+
+    <link rel="icon" href="../public/img/favicon.ico" th:href="@{/img/favicon.ico}" />
+
+    <script src="../public/js/jquery-3.2.1.js" th:src="@{/js/jquery-3.2.1.js}"></script>
+    <script src="../public/js/uikit.js" th:src="@{/js/uikit.js}"></script>
+    <script src="../public/js/main.js" th:src="@{/js/main.js}"></script>
+    <meta th:include="this :: head" th:remove="tag"/>
+</head>
+<body>
+<header th:fragment="site-header">
+    <div class="uk-grid" th:style="'background: url(' + @{/img/hexpattern.png} + ') repeat-x;height: 15%;padding:5px'">
+        <div class="uk-width-3-5"><br/><br/><br/><br/><br/><a name="top"></a></div>
+        <div class="uk-width-2-5">
+            <div class="uk-grid">
+                <div class="uk-width-1-3" th:style="'background: #eee;padding:5px;'">
+                    <img class="uk-responsive-height uk-responsive-width uk-border-circle uk-display-inline"
+                         th:src="@{/img/photo.jpg}" src="../public/img/photo.jpg" align="left"/>
+                    <br/>
+                    &nbsp;<a href="#">About me</a><br/>
+                    &nbsp;<a href="#">Guestbook</a><br/>
+                    &nbsp;<i class="uk-icon-linkedin uk-icon-medium"></i>&nbsp;<i class="uk-icon-github uk-icon-medium"></i><br/>
+                    &nbsp;<i class="uk-icon-lastfm uk-icon-medium"></i>&nbsp;<i class="uk-icon-vk uk-icon-medium"></i>&nbsp;
+                    <i class="uk-icon-facebook uk-icon-medium"></i><br/>
+                </div>
+            </div>
+        </div>
+         <br/>
+    </div>
+</header>
+<aside th:fragment="side-blocks">
+    <div class="uk-block uk-block-muted uk-margin">
+        <div class="uk-panel uk-margin-large" style="padding: 5%">
+            <h3>Trending posts</h3>
+            <span th:each="p : ${trendingPosts}">
+                <a class="nolink" href="#" th:href="@{/posts/viewpost/{id}#disqus_thread/(id=${p.id})}" th:text="${p.title}"></a>&nbsp;
+                <i class="uk-icon-star"></i><span class="uk-text-muted" th:text="${': ' + p.rating}"></span><br/>
+            </span>
+        </div>
+    </div>
+</aside>
+<footer th:fragment="site-footer">
+    &copy; Blog System, 2017
+</footer>
+</body>
+</html>

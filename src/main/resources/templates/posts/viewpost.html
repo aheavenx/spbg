@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: site-head">
+    <title th:text="${post.title}">View Post</title>
+    <link rel="stylesheet" href="../public/css/prism.css" th:href="@{/css/prism.css}"/>
+    <script src="../public/js/prism.js" th:src="@{/js/prism.js}"></script>
+</head>
+
+<body>
+<!--<span th:text="${currentURIPrefix + #httpServletRequest.requestURI}"></span><br/>-->
+<!--<span th:text="${post.uId}"></span>-->
+<header th:replace="layout :: site-header" ></header>
+
+<main>
+
+    <a href="#" th:href="@{/posts/page/1}"><i class="uk-icon-hover uk-icon-large uk-icon-list" style="position: fixed; top: 45%; left: 16%"></i></a>
+    <a href="#top"><i class="uk-icon-hover uk-icon-large uk-icon-toggle-up" style="position: fixed; top: 52%; left: 16%"></i></a>
+    <span th:if="${post.id &lt; totalPosts}">
+        <a href="#" th:href="@{/posts/viewpost/{id}#disqus_thread/(id=${post.id + 1})}">
+            <i class="uk-icon-hover uk-icon-large uk-icon-toggle-left" style="position: fixed; top: 59%; left: 16%"></i>
+        </a>
+    </span>
+    <span th:if="${post.id &gt; 1}">
+        <a href="#" th:href="@{/posts/viewpost/{id}#disqus_thread/(id=${post.id - 1})}">
+            <i class="uk-icon-hover uk-icon-large uk-icon-toggle-right" style="position: fixed; top: 59%; left: 62%"></i>
+        </a>
+    </span>
+    <a href="#disqus_thread"><i class="uk-icon-hover uk-icon-large uk-icon-comments-o" style="position: fixed; top: 66%; left: 16%"></i></a>
+    <div class="uk-grid">
+        <div class="uk-width-1-5"></div>
+        <div class="uk-width-2-5 uk-text-left">
+
+            <br/><h1><strong th:text="${post.title}"></strong></h1>
+            &nbsp;<i class="uk-icon-calendar"></i>&nbsp;
+            <span class="uk-text-muted" th:text="${#dates.format(post.tsPosted, 'dd-MM-yyyy HH:mm')}"></span>&nbsp;&nbsp;
+            <i class="uk-icon-hashtag"></i>&nbsp;
+            <span th:each="t : ${post.postsTagsById}">
+                    <div class="uk-badge" th:text="${t.tagsByTagId.tagName}"></div>
+                </span>
+            &nbsp;<i class="uk-icon-star"></i><span class="uk-text-muted" th:text="${': ' + post.rating}"></span>
+            <br/><br/>
+            <span class="uk-text-large" th:utext="${post.postsContentsByContent.body}"></span>
+            <br/>
+            <hr/>
+            <div id="disqus_thread"></div>
+            <script th:inline="javascript">
+                var disqus_config = function () {
+                    this.page.url = [[${currentURIPrefix + #httpServletRequest.requestURI}]];  // Replace PAGE_URL with your page's canonical URL variable
+                    this.page.identifier = [[${post.uId}]]; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+
+                (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://aheavenx.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+            </script>
+        </div>
+        <div class="uk-width-2-5"></div>
+    </div>
+
+</main>
+
+<footer th:replace="layout :: site-footer" ></footer>
+</body>
+
+</html>

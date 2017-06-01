@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: site-head">
+    <title>Blog</title>
+</head>
+
+<body>
+<header th:replace="layout :: site-header" ></header>
+<main id="posts">
+    <div class="uk-grid">
+        <div class="uk-width-1-5"></div>
+        <div class="uk-width-2-5 uk-text-left">
+            <br/>
+            <br/>
+            <a class="nolink" href="#" th:href="@{/posts/viewpost/{id}/(id=${latestPost.id})}"><h1><strong th:utext="${latestPost.title}"></strong></h1></a>
+            &nbsp;<i class="uk-icon-calendar"></i>&nbsp;
+            <span class="uk-text-muted" th:text="${#dates.format(latestPost.tsPosted, 'dd-MM-yyyy HH:mm')}"></span>&nbsp;&nbsp;
+            <i class="uk-icon-hashtag"></i>&nbsp;
+            <span th:each="t : ${latestPost.postsTagsById}">
+                <div class="uk-badge" th:text="${t.tagsByTagId.tagName}"></div>
+            </span>
+            <br/><br/>
+            <span class="uk-text-large" th:utext="${latestPost.postsContentsByContent.summary}"></span><br />
+            <div class="uk-text-right"><a class="nolink" href="#" th:href="@{/posts/viewpost/{id}/(id=${latestPost.id})}">Read more...</a></div><br />
+            <a href="#" th:href="@{/posts/page/1}">Go to all</a>
+        </div>
+        <div class="uk-width-1-5"><aside th:replace="layout :: side-blocks"></aside></div>
+    </div>
+</main>
+<footer th:replace="layout :: site-footer"></footer>
+</body>
+</html>

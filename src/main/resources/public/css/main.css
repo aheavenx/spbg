@@ -1,0 +1,18 @@
+
+body>footer {
+    background: #eee;
+    padding: 5px;
+    margin: 10px 0;
+    text-align: center;
+}
+.nolink {
+    text-decoration: none;
+    color: #000;
+}
+.nolink:hover {
+    text-decoration: none;
+    color: #000;
+}
+div.hoverable:hover {
+    color: #EEEEEE;
+}
