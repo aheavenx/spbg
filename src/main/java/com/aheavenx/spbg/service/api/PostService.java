@@ -15,7 +15,4 @@ public interface PostService {
     BlogPost getContent(BlogPost post);
     List<BlogPost> findTopTrending(Integer i);
     BlogPost findById(Integer id);
-    BlogPost create(Integer post);
-    BlogPost edit(Integer post);
-    void deleteById(Long id);
 }

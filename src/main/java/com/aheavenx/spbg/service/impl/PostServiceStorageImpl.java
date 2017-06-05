@@ -49,19 +49,4 @@ public class PostServiceStorageImpl implements PostService {
     public BlogPost findById(Integer id) {
         return postRepository.findOne(id);
     }
-
-    @Override
-    public BlogPost create(Integer post) {
-        return null;
-    }
-
-    @Override
-    public BlogPost edit(Integer post) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Long id) {
-
-    }
 }
