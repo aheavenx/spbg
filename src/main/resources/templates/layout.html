@@ -15,7 +15,7 @@
 </head>
 <body>
 <header th:fragment="site-header">
-    <div class="uk-grid" th:style="'background: url(' + @{/img/hexpattern.png} + ') repeat-x;height: 15%;padding:5px'">
+   <!-- <div class="uk-grid" th:style="'background: url(' + @{/img/hexpattern.png} + ') repeat-x;height: 15%;padding:5px'">
         <div class="uk-width-3-5"><br/><br/><br/><br/><br/><a name="top"></a></div>
         <div class="uk-width-2-5">
             <div class="uk-grid">
@@ -32,7 +32,16 @@
             </div>
         </div>
          <br/>
-    </div>
+    </div>-->
+    <nav class="uk-navbar">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a><img class="uk-responsive-height" src="../public/img/logo.png" th:src="@{/img/logo.png}"/> </a>
+                </li>
+                <li><a>5646</a></li>
+                <li><a>645666</a></li>
+            </ul>
+    </nav>
 </header>
 <aside th:fragment="side-blocks">
     <div class="uk-block uk-block-muted uk-margin">
