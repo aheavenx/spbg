@@ -16,3 +16,7 @@ body>footer {
 div.hoverable:hover {
     color: #EEEEEE;
 }
+
+body {
+    background: #fff url(../img/page-bg-1.jpg);
+}
