@@ -1,0 +1,181 @@
+TITLE: Obfuscating "Hello world" in Java.
+CONTENT:
+(Almost) every programmer, either learning his first, secondary, or.. 100000th language starts with the simple "Hello, world!" application.<br/>
+What happens, if one goes crazy and overengineers this program?<br/>
+Let's find out, how it could look in Java 8.<br/>
+<br/>
+First of all, we start with the easiest and the most common "Hello, world!" application:<br/>
+<pre><code class="language-java">
+package com.aheavenx.hello;
+
+public class HelloWorld {
+	public static void main(String[] args) {
+		System.out.println("Hello world");
+	}
+}
+</code></pre>
+And this is the result of our transformations:
+<pre><code class="language-java">
+package com.aheavenx.hello;
+import java.io.*; import java.math.*; import java.util.*; import java.util.function.*; import java.util.stream.*;
+public class Beautiful {
+    @Deprecated private void program() throws Throwable {
+
+        int _=0,__=1,___=2, _____=4,____=8;Class.forName(Stream.of(( (Function&lt;byte[],Byte[] &gt;)($-&gt;{Byte[]$$=new Byte[$.length];Arrays
+        .setAll($$,$$$-&gt;$[ $$$]);;;;return $$; })). apply (new BigInteger(Long .toString( 0x6b6277622f6d626fL,____&lt;&lt;__)+Long .toString
+        (0x682f547a7475666eL,_____&lt;&lt; ___),__&lt;&lt;_____).toByteArray())).map($-&gt;$- 1).map($-&gt;((char)$.shortValue( ))).collect(StringWriter
+
+
+        ::new,StringWriter::write,($,$$)-&gt;$.write($$.toString())).toString()).getDeclaredField(new StringBuilder().append(BiFunction//
+        .class.getName().charAt(__&lt;&lt;              _____)).append(Function.class.getName()            .charAt((__&lt;&lt;___)+__ ) ) .append(
+        getClass().getDeclaredMethod(             "program").getAnnotations()[_].toString(           ).toLowerCase().charAt((__&lt;&lt;_____
+        )/**/+(__&lt;&lt;__))).toString()).             getType()./*?*/getDeclaredMethod(Stream            .concat(Stream.of( 82,80,75,76 ).
+        map($-&gt;$^34),Stream.of(0x74))             .map($-&gt;String.valueOf((char)$.intValue            ())).collect(Collectors.joining()
+        ),Class.forName(String.class.getName())).invoke(Class.forName(Stream.of(((Function&lt;byte[],Byte[]&gt;)( $-&gt;{Byte[]$$$=new Byte [$.
+        length];Arrays.setAll( $$$,$$             -&gt;$[$$]);;;;;return $$$;})).apply( new             BigInteger(/*todo: try long*/Long.
+        toString(0x6e657a6532706572L,             _____&lt;&lt;___)+/*!TRY IT!*/Long.toString(             0x6b32577d77786971L ,__&lt;&lt;_____) ,
+        ____&lt;&lt;__).toByteArray())).map                                                                ($-&gt;$-4).map($-&gt;((char)$./*byte*/
+        shortValue( ) ) ) . collect (                                                                StringWriter::new,StringWriter ::
+        write,($,$$)-&gt;$.write(/**/$$.             toString()))./*.toString()*/toString())            .getDeclaredField(new String( new
+        byte[]{0x6f,0x75,0x74})).get(             null),((Function&lt;BigInteger,?&gt;)(($$$)-&gt;            {BiFunction&lt;BiFunction,BigInteger
+        ,?&gt;fnb=($$,$)-&gt;$.equals(BigInteger.ZERO)?"":new String(new char[]{(char)Integer.parseInt($.mod(BigInteger.valueOf(256))/*?*/ .
+        toString())})+$$.apply($$, $.             divide(BigInteger.valueOf(256)));return            fnb.apply(fnb, $$$);})).   apply(
+        BigInteger.valueOf(/*hexdec*/             8026160351752501L).multiply(BigInteger.            valueOf(100000000000000L ) ) .add
+        (BigInteger.valueOf(/*hex c*/             24568770929992L))));Class.forName(/*?*/            BinaryOperator.class.getName());;
+        for(int $=-178;;){$&lt;&lt;=$&gt;&gt;(_&lt;&lt;_____)&gt;&gt;_&gt;&gt;__;;$&gt;&gt;&gt;=_&lt;&lt;__;break;}class klas{ private final transient int finishProgramNow = 42 ;}
+
+    }
+
+    public static void main(String[] args) throws Throwable {
+        new Beautiful().program();
+    }
+}  
+</code>
+</pre>
+Now I'm going to explain how to achieve this programming "state of art". Let's rewrite our initial "hello" using reflection.<br/>
+<pre><code class="language-java">
+package com.aheavenx.hello;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+public class HelloWorld {
+    public static void main(String[] args) {
+        try {
+			Field out = Class.forName("java.lang.System").getDeclaredField("out");
+            Method print = out.getType().getDeclaredMethod("print", String.class);
+            print.invoke(out.get(null), "Hello world");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+
+Because "out" is a public field of a class "System", we just get it using a reflection.<br/>
+Then, we get an associated PrintWriter object using "getType", and its method "print".<br/>
+After that, it's just invoked and prints good old lovely "Hello world"!<br/>
+Variable declarations? How about NO?<br/>
+<pre><code class="language-java">
+Class.forName("java.lang.System")
+    .getDeclaredField("out")
+    .getType()
+    .getDeclaredMethod("print", Class.forName("java.lang.String"))
+    .invoke(
+        Class.forName("java.lang.System").getDeclaredField("out").get(null),
+        "Hello world"
+    );
+</code></pre>
+
+Still, this is too readable. The first thing, that comes to mind is: why not obfuscate strings!<br/>
+Let's start with first "java.lang.System".<br/>
+<br/>
+Using its hex ASCII codes, we get something like <i>6a6176612e6c616e672e53797374656d</i>. Going further, we make a very simple encryption using ROT1. <br/>
+The resulting number is <i>6b6277622f6d626f682f547a7475666e</i>.<br/>
+We need to somehow decrypt this numeric representation into a String. The easiest way to do it is to represent it as a byte array, decrypt, and collect it back as a string.<br/>
+Using Stream API is such a nice way to do things, they said...<br/>
+First of all, a little of mixed-in pseudocode.<br/>
+
+<pre><code class="language-java">
+Stream.of(makeByteArray(0x6b6277622f6d626f682f547a7475666e))
+	.map(b -&gt; b - 1)/*ROT1 decoding*/
+	.map(b -&gt; ((char) b.shortValue))/*Integer -&gt; char*/
+	.collect(Collectors::charArrayToString);
+</code></pre>
+
+<i>shortValue()</i> on an <b>Integer</b>? Who cares about type safety here?<br/>
+Making a byte array out of a number is a bit tricky. This is where BigInteger comes into stage!<br/>
+
+<pre><code class="language-java">
+Stream.of(new BigInteger("6b6277622f6d626f682f547a7475666e", 16).toByteArray())
+	.map(b -&gt; b - 1)
+	.map(b -&gt; ((char) b.shortValue))
+	.collect(Collectors::charArrayToString);
+</code></pre>
+
+However, this still does not compile, due to not autoboxing <i>byte</i>[] into <b>Byte</b>[].<br/>
+No problem, we're doing it manually!<br/>
+
+<pre><code class="language-java">
+Function&lt;byte[], Byte[]&gt; manualBoxing = (unboxed -&gt; { 
+	Byte[] boxed = new Byte[unboxed.length]; 
+	Arrays.setAll(boxed, b -&gt; unboxed[b]); 
+	return boxed; 
+});
+Stream.of(manualBoxing.apply(
+		new BigInteger("6b6277622f6d626f682f547a7475666e", 16).toByteArray()))
+	.map(b -&gt; b - 1)
+	.map(b -&gt; ((char) b.shortValue()))
+	.collect(Collectors::charArrayToString);
+</code></pre>
+
+The awesome thing about Java 8 is that is allows inlinely declaring and calling a function! Just don't forget about explicit casting.<br/>
+Meanwhile, we perfrom the tricky manual collection of a char array into a String, using an overloaded version: <i>collect(supplier, accumulator, combiner)</i>"...<br/>
+
+<pre><code class="language-java">
+Stream.of(
+		((Function&lt;byte[], Byte[]&gt;)
+		(new BigInteger("6b6277622f6d626f682f547a7475666e", 16)
+			.toByteArray())))
+	.map(b -&gt; b - 1)
+	.map(b -&gt; ((char) b.shortValue))
+	.collect(StringWriter::new, StringWriter::write, (w1, w2) -&gt; w1.write(w2.toString()))
+	.toString();
+</code></pre>
+
+Keeping a string expression in obfuscated programs is a MOVUEAU TONE. We just have to get rid of them all.<br/>
+And by the way, who needs meaningful variable names? Java supports $-sign-starting names!<br/>
+
+<pre><code class="language-java">
+/* Remember, this monstrous construct just replaces "java.lang.System"! */
+Stream.of(
+    	((Function&lt;byte[], Byte[]&gt;)
+    	 ($ -&gt; { Byte[] $$ = new Byte[$.length]; Arrays.setAll($$, $$$ -&gt; $[$$$]); return $$; }))
+    	 .apply(new BigInteger(
+    		Long.toString(0x6b6277622f6d626fL, 16) + 
+    		Long.toString(0x682f547a7475666eL, 16), 16)
+    		.toByteArray())
+    )
+    .map($ -&gt; $ - 1)
+    .map($ -&gt; ((char) $.shortValue()))
+    .collect(StringWriter::new, StringWriter::write, ($, $$) -&gt; $.write($$.toString()))
+    .toString();
+</code></pre>
+
+The second "java.lang.System" obfuscation is similar, just using ROT4 here (Maybe YOU could propose a more evil encoding/decoding? Leave a comment!)<br/>
+
+<pre><code class="language-java">
+Stream.of(
+    	((Function&lt;byte[], Byte[]&gt;)
+    	 ($ -&gt; { Byte[] $$ = new Byte[$.length]; Arrays.setAll($$, $$$ -&gt; $[$$$]); return $$; }))
+    	 .apply(new BigInteger(
+    		Long.toString(0x6e657a6532706572L, 16) + 
+    		Long.toString(0x6b32577d77786971L, 16), 16), 16)
+    		.toByteArray())
+    )
+    .map($ -&gt; $ - 4)
+    .map($ -&gt; ((char) $.shortValue()))
+    .collect(StringWriter::new, StringWriter::write, ($, $$) -&gt; $.write($$.toString()))
+    .toString();
+</code></pre>
+
