@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -16,7 +17,10 @@ public class HomeController {
     @Autowired private PostService postService;
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("latestPost", postService.findAll().stream().sorted(Comparator.comparing(BlogPost::getTsPosted)).limit(1).findFirst().orElse(null));
+        model.addAttribute("latestPosts", postService.findAll().stream()
+                .sorted(Comparator.comparing(
+                        BlogPost::getTsPosted, Comparator.reverseOrder()))
+                .limit(5).collect(Collectors.toList()));
         return "index";
     }
 }

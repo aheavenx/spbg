@@ -38,8 +38,8 @@
                 <li>
                     <a href="index.html" th:href="@{/}"><img class="uk-responsive-height" src="../public/img/logo.png" th:src="@{/img/logo.png}"/> </a>
                 </li>
-                <li><a>5646</a></li>
-                <li><a>645666</a></li>
+                <li><a>Panel Entry 1</a></li>
+                <li><a>Panel Entry 2</a></li>
             </ul>
         <div class="uk-navbar-content uk-hidden-small">
             <form class="uk-form uk-margin-remove uk-display-inline-block">
@@ -52,7 +52,7 @@
 <aside th:fragment="side-blocks">
     <div class="uk-block uk-block-muted uk-margin">
         <div class="uk-panel uk-margin-large" style="padding: 5%">
-            <h3>Trending posts</h3>
+            <h3>Top posts</h3>
             <span th:each="p : ${trendingPosts}">
                 <a class="nolink" href="#" th:href="@{/posts/viewpost/{id}#disqus_thread/(id=${p.id})}" th:text="${p.title}"></a>&nbsp;
                 <i class="uk-icon-star"></i><span class="uk-text-muted" th:text="${': ' + p.rating}"></span><br/>
